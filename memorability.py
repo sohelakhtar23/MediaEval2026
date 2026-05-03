@@ -10,7 +10,6 @@ Five research directions combined into a single pipeline:
 
 Usage
 -----
-    pip install openai Pillow scikit-learn scipy pandas numpy
     export OPENAI_API_KEY=sk-...
     python memorability_pipeline.py
 
@@ -21,7 +20,6 @@ Directory layout expected (all relative to DATA_ROOT):
     features/AlexNet/{id}.npy   (and other CNN feature sub-folders)
 """
 
-# ── Standard library ──────────────────────────────────────────────────────────
 import os
 import json
 import logging
@@ -29,7 +27,6 @@ import warnings
 from pathlib import Path
 from typing import Optional
 
-# ── Third-party ───────────────────────────────────────────────────────────────
 import numpy as np
 import pandas as pd
 from PIL import Image
@@ -44,9 +41,6 @@ from sklearn.preprocessing import StandardScaler
 
 from dotenv import load_dotenv
 load_dotenv()
-
-# ─────────────────────────────────────────────────────────────────────────────
-
 warnings.filterwarnings("ignore")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
@@ -231,19 +225,19 @@ def _build_llm_prompt(row: pd.Series, stt_text: str) -> str:
     schema_lines = "\n".join(f'  "{k}": {v}' for k, v in _LLM_DIMENSIONS.items())
     keys_json    = "{" + ", ".join(f'"{k}": ...' for k in _LLM_KEYS) + "}"
 
-    return f"""Commercial video information:
-- Brand/Channel : {row.get("channelName", "Unknown")}
-- Title         : {row.get("title", "")}
-- Description   : {str(row.get("description", ""))[:400]}
-- Tags          : {row.get("tags", "")}
-- Duration      : {row.get("durationSeconds", 0):.0f} seconds
-- Transcript (~{MAX_STT_WORDS_LLM} words): {stt_clip}
-
-Score this commercial on 8 dimensions (all floats 0-10):
-{schema_lines}
-
-Return ONLY this JSON (no extra text):
-{keys_json}"""
+    return (
+        f"Commercial video information:\n"
+        f"- Brand/Channel : {row.get('channelName', 'Unknown')}\n"
+        f"- Title         : {row.get('title', '')}\n"
+        f"- Description   : {str(row.get('description', ''))[:400]}\n"
+        f"- Tags          : {row.get('tags', '')}\n"
+        f"- Duration      : {row.get('durationSeconds', 0):.0f} seconds\n"
+        f"- Transcript (~{MAX_STT_WORDS_LLM} words): {stt_clip}\n\n"
+        f"Score this commercial on 8 dimensions (all floats 0-10):\n"
+        f"{schema_lines}\n\n"
+        f"Return ONLY this JSON (no extra text):\n"
+        f"{keys_json}"
+    )
 
 
 def get_llm_scalars(video_id: str, row: pd.Series, stt_text: str,
@@ -302,8 +296,6 @@ def load_cnn_features(df: pd.DataFrame) -> np.ndarray:
         for _, row in df.iterrows():
             vid_id = row["id"]
             npy    = model_dir / f"{vid_id}.npy"
-            if not npy.exists():                           # fallback: integer filename
-                npy = model_dir / f"{int(row['video_id'])}.npy"
 
             if npy.exists():
                 arr = np.load(npy, allow_pickle=True)
