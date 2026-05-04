@@ -11,3 +11,4 @@ devset-seconds-watched/
 frames/
 
 .env
+__pycache__
