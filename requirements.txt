@@ -3,3 +3,7 @@ scikit-learn
 pillow
 openai
 python-dotenv
+
+tqdm
+# pip install torch --index-url https://download.pytorch.org/whl/cu124
+transformers
