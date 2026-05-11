@@ -16,10 +16,10 @@ Directory layout expected
 Usage
 ─────
   # Train, run cross-validation, save pipeline
-  python memorability_pipeline.py --mode train
+  python code.py --mode train
 
   # Predict on test set (after receiving test STT folder)
-  python memorability_pipeline.py --mode predict \
+  python code.py --mode predict \
       --test_csv  testset_videolist.csv \
       --test_stt  testset-stt/ \
       --output    predictions.csv
@@ -41,7 +41,7 @@ warnings.filterwarnings("ignore")
 # ── Paths ──────────────────────────────────────────────────────────────────────
 TRAIN_CSV     = "devset_videolist_GT.csv"
 STT_DIR       = Path("devset-stt")
-PIPELINE_PATH = Path("memorability_pipeline.pkl")
+PIPELINE_PATH = Path("model_artefacts_Feb.pkl")
 
 # ── TF-IDF parameters (exactly as in working notebook) ────────────────────────
 TFIDF_PARAMS = dict(
@@ -424,7 +424,7 @@ def run_train():
     print(f"  CV Brand Memorability Spearman r: {r_b_cv:.4f}")
     print(f"  No fitted model parameters — zero overfitting risk")
     print("\nTo predict on the test set:")
-    print("  python memorability_pipeline.py --mode predict \\")
+    print("  python code.py --mode predict \\")
     print("      --test_csv testset_videolist.csv \\")
     print("      --test_stt testset-stt/ \\")
     print("      --output   predictions.csv")

@@ -1,0 +1,106 @@
+(.venv) PS D:\ANLAM_Lab\⚒️MediaEval2026\media_code>  python .\Feb_final-result.py
+Loaded 339 videos from devset_videolist_GT.csv
+Building brand-isolated folds...
+channelName
+Goldman Sachs                                   79
+UBS                                             37
+jpmorgan                                        31
+Aon                                             18
+Credit Suisse                                   17
+Vanguard                                        17
+Allianz                                         14
+Legal & General Investment Management - LGIM    14
+HSBC UK                                         12
+Janus Henderson Investment Trusts               11
+Legal & General                                 10
+BMO Global Asset Management - EMEA               8
+Invesco                                          8
+Amundi                                           7
+Blackstone                                       7
+BNP Paribas                                      6
+Aviva                                            5
+Life at Capital Group                            4
+Aon Assessment Solutions                         4
+T. Rowe Price                                    4
+Columbia Threadneedle Investments EMEA APAC      3
+Baillie Gifford UK                               3
+Aegon                                            3
+Natixis Investment Managers US                   3
+Santander Asset Management UK                    3
+Aviva UK                                         3
+BNP Paribas Leasing Solutions UK                 2
+AXA Investment Managers                          2
+State Street Global Advisors                     1
+M&G Investments                                  1
+Baillie Gifford                                  1
+Capital Group                                    1
+
+Fold sizes (videos):
+fold
+0    79
+1    65
+2    65
+3    65
+4    65
+Name: count, dtype: int64
+
+Channels per fold:
+  Fold 0: ['Goldman Sachs']
+  Fold 1: ['UBS', 'Legal & General', 'Blackstone', 'Aon Assessment Solutions', 'Baillie Gifford UK', 'Santander Asset Management UK', 'M&G Investments']
+  Fold 2: ['jpmorgan', 'Legal & General Investment Management - LGIM', 'Invesco', 'Life at Capital Group', 'T. Rowe Price', 'Aviva UK', 'Baillie Gifford']
+  Fold 3: ['Aon', 'Allianz', 'HSBC UK', 'BMO Global Asset Management - EMEA', 'BNP Paribas', 'Aegon', 'BNP Paribas Leasing Solutions UK', 'AXA Investment Managers']
+  Fold 4: ['Credit Suisse', 'Vanguard', 'Janus Henderson Investment Trusts', 'Amundi', 'Aviva', 'Columbia Threadneedle Investments EMEA APAC', 'Natixis Investment Managers US', 'State Street Global Advisors', 'Capital Group']
+Transcripts — missing files: 0, empty: 3
+TF-IDF vocabulary size: 3000
+
+============================================================
+FINDING OPTIMAL n_comp PER TARGET
+n_comp        Mem r  Brand r
+------------------------------
+50           0.1702   0.1609
+80           0.1835   0.0579
+100          0.1859   0.1729
+120          0.1141   0.1008
+150          0.2018   0.0386
+200          0.1006   0.0871
+
+Best n_comp for memorability:       150 (r=0.2018)
+Best n_comp for brand memorability: 100 (r=0.1729)
+
+============================================================
+FINAL CV RESULTS — per-target optimal configs
+  Memorability Spearman r:       0.2018
+  Brand Memorability Spearman r: 0.1729
+
+Per-fold breakdown:
+  Fold      n    Mem r   Brand r  Channels
+  -----------------------------------------------------------------
+  0        79   0.0879    0.0123  Goldman Sachs...
+  1        65   0.2065   -0.0130  Legal & General, UBS...
+  2        65  -0.0130    0.2508  jpmorgan, Legal & General Investment Management - LGIM...
+  3        65   0.2122    0.3028  Allianz, BNP Paribas...
+  4        65  -0.0080    0.0300  Aviva, Amundi...
+
+============================================================
+FITTING FINAL MODELS ON ALL 339 TRAINING VIDEOS
+  Dims used for memorability:       96/150
+  Dims used for brand memorability: 63/100
+
+Sanity check — predict_test_videos applied to train set:
+  Mem r (train):   0.5953  (expected > CV score)
+  Brand r (train): 0.4987  (expected > CV score)
+
+============================================================
+Pipeline saved → memorability_pipeline.pkl
+
+FINAL SUMMARY:
+  Method  : LSA(150/100) + rank aggregation on STT
+  CV Memorability Spearman r:       0.2018
+  CV Brand Memorability Spearman r: 0.1729
+  No fitted model parameters — zero overfitting risk
+
+To predict on the test set:
+  python code.py --mode predict \
+      --test_csv testset_videolist.csv \
+      --test_stt testset-stt/ \
+      --output   predictions.csv

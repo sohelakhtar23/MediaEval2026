@@ -12,3 +12,7 @@ frames/
 
 .env
 __pycache__
+
+test-code/
+# terminal-print/
+model_artefacts.pkl

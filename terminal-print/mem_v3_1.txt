@@ -1,0 +1,113 @@
+(.venv) PS D:\ANLAM_Lab\⚒️MediaEval2026\media_code>  python .\mem_cnn_video-wise_v3_1.py
+2026-05-08 20:28:36,071 INFO Loaded 339 training videos (32 channels)
+2026-05-08 20:28:36,071 WARNING OPENAI_API_KEY not set — LLM scalars will be neutral (5.0)
+2026-05-08 20:28:36,071 INFO LLM cache: 339 entries loaded
+2026-05-08 20:28:36,071 INFO Extracting features — directions 1, 2, 3 (handcrafted) + 4 (CNN) ...
+2026-05-08 20:28:55,274 INFO   25/339 videos processed ...
+2026-05-08 20:29:15,428 INFO   50/339 videos processed ...
+2026-05-08 20:29:36,239 INFO   75/339 videos processed ...
+2026-05-08 20:30:04,281 INFO   100/339 videos processed ...
+2026-05-08 20:30:21,320 INFO   125/339 videos processed ...
+2026-05-08 20:30:40,860 INFO   150/339 videos processed ...
+2026-05-08 20:31:05,543 INFO   175/339 videos processed ...
+2026-05-08 20:31:29,467 INFO   200/339 videos processed ...
+2026-05-08 20:31:54,962 INFO   225/339 videos processed ...
+2026-05-08 20:32:19,342 INFO   250/339 videos processed ...
+2026-05-08 20:32:43,029 INFO   275/339 videos processed ...
+2026-05-08 20:33:07,470 INFO   300/339 videos processed ...
+2026-05-08 20:33:27,557 INFO   325/339 videos processed ...
+2026-05-08 20:33:32,219 INFO LLM cache saved (339 entries)
+2026-05-08 20:33:32,219 INFO Applying PCA to CNN features (dir 4) ...
+2026-05-08 20:33:32,219 INFO   Concatenated CNN shape: (339, 27648)
+2026-05-08 20:33:32,781 INFO   PCA-32 variance explained: 52.13%
+
+════════════════════════════════════════════════════════════════
+  FEATURE → TARGET SPEARMAN CORRELATIONS  (◄ = |r| > 0.15)
+════════════════════════════════════════════════════════════════
+  frame_r_mean                      mem=-0.060  brand=-0.003
+  frame_g_mean                      mem=-0.021  brand=+0.042
+  frame_b_mean                      mem=-0.002  brand=+0.036
+  frame_r_std                       mem=+0.047  brand=+0.088
+  frame_g_std                       mem=+0.090  brand=+0.109
+  frame_b_std                       mem=+0.089  brand=+0.079
+  frame_brightness                  mem=-0.026  brand=+0.025
+  frame_bright_var                  mem=-0.031  brand=-0.037
+  frame_saturation                  mem=+0.025  brand=-0.065
+  frame_sat_var                     mem=-0.005  brand=-0.042
+  frame_motion                      mem=+0.031  brand=+0.023
+  frame_motion_var                  mem=-0.026  brand=-0.044
+  frame_n_cuts                      mem=+0.047  brand=+0.052
+  frame_color_change                mem=-0.033  brand=-0.051
+  brand_mention_count               mem=-0.070  brand=+0.060
+  brand_density                     mem=-0.028  brand=+0.062
+  brand_in_title                    mem=-0.279  brand=-0.139 ◄
+  brand_in_stt                      mem=-0.036  brand=+0.034
+  stt_word_count                    mem=-0.015  brand=+0.007
+  stt_unique_ratio                  mem=-0.002  brand=-0.020
+  avg_sentence_len                  mem=-0.055  brand=-0.007
+  tag_count                         mem=-0.023  brand=-0.037
+  brand_prominence                  mem=-0.073  brand=+0.058
+  emotional_valence                 mem=+0.139  brand=+0.063
+  narrative_arc                     mem=+0.029  brand=+0.050
+  call_to_action                    mem=+0.008  brand=+0.061
+  information_density               mem=-0.112  brand=+0.029
+  novelty_surprise                  mem=+0.080  brand=+0.043
+  visual_dynamism                   mem=+0.040  brand=+0.026
+  brand_specificity                 mem=-0.103  brand=+0.022
+
+2026-05-08 20:33:32,845 INFO Running 5-fold GroupKFold cross-validation ...
+════════════════════════════════════════════════════════════════
+  ABLATION — GroupKFold by channel (Goldman Sachs = fold 0)
+════════════════════════════════════════════════════════════════
+  Group                           mem_SRCC  brand_SRCC    dim
+  ----------------------------  ----------  ----------  -----
+  frame — dir 1 [Ba]             +0.0090     +0.0506     14
+  frame — dir 1 [RF]             +0.0109     -0.0254     14
+  brand/text — dir 2 [Ba]        +0.0475     +0.0087      8
+  brand/text — dir 2 [RF]        +0.0352     -0.0662      8
+  llm scalars — dir 3 [Ba]       +0.0832     +0.0148      8
+  llm scalars — dir 3 [RF]       +0.1669     +0.0866      8
+  cnn pca — dir 4 [Ba]           +0.0689     +0.0535     32
+  cnn pca — dir 4 [RF]           +0.0990     +0.1123     32
+  --------------------------  ----------  ----------  -----
+  ALL COMBINED [Ba]              +0.1096     +0.0232     62
+  ALL COMBINED [RF]              +0.2747     +0.0628     62
+
+════════════════════════════════════════════════════════════════
+  BEST: ALL COMBINED — RF (channel-stratified GroupKFold)
+════════════════════════════════════════════════════════════════
+  Video Memorability
+    SRCC = +0.2747 ± 0.1113
+    PCC  = +0.2630
+    MSE  = 0.0197
+  Brand Memorability
+    SRCC = +0.0628 ± 0.0911
+    PCC  = +0.0619
+    MSE  = 0.0242
+
+════════════════════════════════════════════════════════════════
+  TOP 15 FEATURES — permutation importance (RF, mem target)
+════════════════════════════════════════════════════════════════
+   1. brand_in_title                          +0.5155
+   2. call_to_action                          +0.0694
+   3. cnn_pca_6                               +0.0658
+   4. frame_g_std                             +0.0547
+   5. cnn_pca_22                              +0.0394
+   6. cnn_pca_27                              +0.0305
+   7. cnn_pca_10                              +0.0270
+   8. cnn_pca_11                              +0.0269
+   9. cnn_pca_3                               +0.0266
+  10. cnn_pca_16                              +0.0258
+  11. frame_sat_var                           +0.0252
+  12. cnn_pca_28                              +0.0242
+  13. avg_sentence_len                        +0.0195
+  14. cnn_pca_2                               +0.0194
+  15. cnn_pca_12                              +0.0191
+2026-05-08 20:35:47,151 INFO Training final models on full training set ...
+2026-05-08 20:35:48,844 INFO Final models trained — mem: 62 features, brand: 32 features
+2026-05-08 20:35:48,900 INFO Artefacts saved → model_artefacts.pkl
+2026-05-08 20:35:48,900 INFO   Mem model   : all features  (dim=62)
+2026-05-08 20:35:48,900 INFO   Brand model : CNN-only       (dim=32)
+2026-05-08 20:35:48,900 INFO Run predict_test.py to generate test predictions.
+
+                      ✓ Pipeline complete.
