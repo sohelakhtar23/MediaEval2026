@@ -27,6 +27,7 @@ import logging
 import os
 import pickle
 import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 from pathlib import Path
 from typing import Optional
 
@@ -44,8 +45,8 @@ from sklearn.model_selection import GroupKFold
 from sklearn.preprocessing import StandardScaler
 
 # ─────────────────────────────────────────────────────────────────────────────
-
-warnings.filterwarnings("ignore")
+from dotenv import load_dotenv
+load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
 

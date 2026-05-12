@@ -1,7 +1,11 @@
-2026-05-11 15:47:03,906 INFO LLM cache saved (678 entries)
-2026-05-11 15:47:03,906 INFO Applying PCA to CNN features (dir 4) ...
-2026-05-11 15:47:03,907 INFO   Concatenated CNN shape: (339, 27648)
-2026-05-11 15:47:04,197 INFO   PCA-32 variance explained: 52.13%
+          <<   didn't improve performance   >>
+          <<   initial llm_scalar_cache.json is better   >>
+
+
+2026-05-12 07:16:16,414 INFO LLM cache saved (339 entries)
+2026-05-12 07:16:16,414 INFO Applying PCA to CNN features (dir 4) ...
+2026-05-12 07:16:16,414 INFO   Concatenated CNN shape: (339, 27648)
+2026-05-12 07:16:16,926 INFO   PCA-32 variance explained: 52.13%
 
 ════════════════════════════════════════════════════════════════
   FEATURE → TARGET SPEARMAN CORRELATIONS  (◄ = |r| > 0.15)
@@ -28,72 +32,68 @@
   stt_unique_ratio                  mem=-0.002  brand=-0.020
   avg_sentence_len                  mem=-0.055  brand=-0.007
   tag_count                         mem=-0.023  brand=-0.037
-  emotional_valence                 mem=+0.113  brand=+0.050
-  narrative_arc                     mem=+0.079  brand=+0.108
-  novelty_surprise                  mem=+0.147  brand=+0.017
-  hook_strength                     mem=+0.081  brand=-0.015
-  human_presence                    mem=+0.134  brand=+0.057
-  pacing_energy                     mem=+0.126  brand=+0.112
-  concrete_imagery                  mem=+0.177  brand=+0.137 ◄
-  humor_level                       mem=+0.120  brand=+0.061
-  emotional_peak                    mem=+0.125  brand=+0.053
-  personal_relevance                mem=+0.135  brand=+0.074
-  message_clarity                   mem=+0.108  brand=+0.066
-  sensory_richness                  mem=+0.167  brand=+0.129 ◄
-  brand_prominence                  mem=-0.055  brand=+0.077
-  brand_name_repetition             mem=-0.079  brand=+0.066
-  brand_open                        mem=-0.004  brand=+0.059
-  brand_close                       mem=-0.028  brand=+0.064
-  brand_integration                 mem=+0.067  brand=+0.097
-  brand_specificity                 mem=+0.045  brand=+0.133
-  call_to_action                    mem=+0.015  brand=+0.048
-  brand_vs_category                 mem=+0.077  brand=+0.132
+  brand_prominence                  mem=-0.076  brand=+0.046
+  emotional_valence                 mem=+0.142  brand=+0.063
+  narrative_arc                     mem=+0.029  brand=+0.057
+  call_to_action                    mem=-0.010  brand=+0.038
+  information_density               mem=-0.134  brand=+0.002
+  novelty_surprise                  mem=+0.085  brand=+0.038
+  visual_dynamism                   mem=+0.040  brand=-0.009
+  brand_specificity                 mem=-0.116  brand=+0.014
 
-2026-05-11 15:47:04,221 INFO Running 5-fold GroupKFold cross-validation ...
+2026-05-12 07:16:17,000 INFO Running 5-fold GroupKFold cross-validation ...
 ════════════════════════════════════════════════════════════════
   ABLATION — GroupKFold by channel (Goldman Sachs = fold 0)
 ════════════════════════════════════════════════════════════════
   Group                           mem_SRCC  brand_SRCC    dim
   ----------------------------  ----------  ----------  -----
   frame — dir 1 [Ba]             +0.0090     +0.0506     14
-  frame — dir 1 [RF]             +0.0116     -0.0254     14
+  frame — dir 1 [RF]             +0.0109     -0.0254     14
   brand/text — dir 2 [Ba]        +0.0475     +0.0087      8
-  brand/text — dir 2 [RF]        +0.0353     -0.0662      8
-  llm scalars — dir 3 [Ba]       +0.1326     +0.0668     20
-  llm scalars — dir 3 [RF]       +0.1089     -0.0017     20
+  brand/text — dir 2 [RF]        +0.0352     -0.0662      8
+  llm scalars — dir 3 [Ba]       +0.1136     -0.0377      8
+  llm scalars — dir 3 [RF]       -0.0112     -0.0201      8
   cnn pca — dir 4 [Ba]           +0.0689     +0.0535     32
-  cnn pca — dir 4 [RF]           +0.0990     +0.1115     32
+  cnn pca — dir 4 [RF]           +0.0990     +0.1123     32
   --------------------------  ----------  ----------  -----
-  ALL COMBINED [Ba]              +0.1303     +0.0317     74
-  ALL COMBINED [RF]              +0.2564     +0.0237     74
+  ALL COMBINED [Ba]              +0.1271     +0.0096     62
+  ALL COMBINED [RF]              +0.2703     +0.0323     62
 
 ════════════════════════════════════════════════════════════════
   BEST: ALL COMBINED — RF (channel-stratified GroupKFold)
 ════════════════════════════════════════════════════════════════
   Video Memorability
-    SRCC = +0.2564 ± 0.1120
-    PCC  = +0.2267
-    MSE  = 0.0202
+    SRCC = +0.2703 ± 0.1183
+    PCC  = +0.2636
+    MSE  = 0.0196
   Brand Memorability
-    SRCC = +0.0237 ± 0.0862
-    PCC  = +0.0239
-    MSE  = 0.0243
+    SRCC = +0.0323 ± 0.0933
+    PCC  = +0.0326
+    MSE  = 0.0244
 
 ════════════════════════════════════════════════════════════════
   TOP 15 FEATURES — permutation importance (RF, mem target)
 ════════════════════════════════════════════════════════════════
-   1. brand_in_title                          +0.4673
-   2. cnn_pca_6                               +0.0758
-   3. frame_g_std                             +0.0545
-   4. cnn_pca_22                              +0.0395
-   5. cnn_pca_27                              +0.0284
-   6. cnn_pca_28                              +0.0262
-   7. cnn_pca_11                              +0.0260
-   8. cnn_pca_16                              +0.0258
-   9. avg_sentence_len                        +0.0253
-  10. cnn_pca_3                               +0.0243
-  11. cnn_pca_2                               +0.0229
-  12. cnn_pca_10                              +0.0221
-  13. cnn_pca_20                              +0.0206
-  14. cnn_pca_12                              +0.0201
-  15. cnn_pca_23                              +0.0187
+   1. brand_in_title                          +0.5246
+   2. cnn_pca_6                               +0.0757
+   3. brand_prominence                        +0.0554
+   4. frame_g_std                             +0.0522
+   5. cnn_pca_22                              +0.0383
+   6. cnn_pca_27                              +0.0317
+   7. cnn_pca_11                              +0.0268
+   8. cnn_pca_3                               +0.0257
+   9. cnn_pca_16                              +0.0253
+  10. avg_sentence_len                        +0.0225
+  11. frame_sat_var                           +0.0224
+  12. call_to_action                          +0.0223
+  13. cnn_pca_28                              +0.0221
+  14. cnn_pca_10                              +0.0213
+  15. emotional_valence                       +0.0201
+2026-05-12 07:18:23,577 INFO Training final models on full training set ...
+2026-05-12 07:18:24,656 INFO Final models trained — mem: 62 features, brand: 32 features
+2026-05-12 07:18:24,704 INFO Artefacts saved → model_artefacts.pkl
+2026-05-12 07:18:24,704 INFO   Mem model   : all features  (dim=62)
+2026-05-12 07:18:24,704 INFO   Brand model : CNN-only       (dim=32)
+2026-05-12 07:18:24,704 INFO Run predict_test.py to generate test predictions.
+
+                      ✓ Pipeline complete.
