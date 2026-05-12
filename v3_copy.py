@@ -27,6 +27,7 @@ import logging
 import os
 import pickle
 import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 from pathlib import Path
 from typing import Optional
 
@@ -44,8 +45,8 @@ from sklearn.model_selection import GroupKFold
 from sklearn.preprocessing import StandardScaler
 
 # ─────────────────────────────────────────────────────────────────────────────
-
-warnings.filterwarnings("ignore")
+from dotenv import load_dotenv
+load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
 
@@ -346,8 +347,7 @@ def extract_features(df: pd.DataFrame,
                      frames_root: Path,
                      cache: dict,
                      openai_client: Optional[OpenAI],
-                     features_root: Path = FEATURES_DIR,
-                     is_training: bool = True) -> tuple:
+                     features_root: Path = FEATURES_DIR) -> tuple:
     """
     Run all four feature directions for every video in df.
     Returns (frame_df, brand_df, llm_df, cnn_raw_array).
@@ -362,9 +362,6 @@ def extract_features(df: pd.DataFrame,
         vid_id = row["id"]
         if (i + 1) % 25 == 0:
             log.info(f"  {i + 1}/{total} videos processed ...")
-            cache_path = CACHE_FILE if is_training else Path("predict/llm_scalar_cache_test.json")
-            with open(cache_path, "w") as fh:
-                json.dump(cache, fh, indent=2)
 
         stt_path = stt_root / f"{vid_id}.txt"
         stt_text = (stt_path.read_text(encoding="utf-8", errors="ignore")

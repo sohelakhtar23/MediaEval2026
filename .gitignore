@@ -14,5 +14,6 @@ frames/
 __pycache__
 
 test-code/
+dumped/
 # terminal-print/
 model_artefacts.pkl
