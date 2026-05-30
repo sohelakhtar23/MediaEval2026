@@ -1,4 +1,5 @@
           <<   didn't improve performance   >>
+          <<   3 generated llm_scalar_cache.json values averaged and used for this    >>
           <<   initial llm_scalar_cache.json is better   >>
 
 
